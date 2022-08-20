@@ -1,5 +1,6 @@
 from coinmarketcapapi import CoinMarketCapAPI, CoinMarketCapAPIError
 import json 
+import time
 
 class Cmc_data():
 
@@ -21,6 +22,8 @@ class Cmc_data():
     def get_extract_dats(self):
         raw_tokens = ["AVAX","QI","BTC","CSPR","CFG","CERE","CLV","ATOM","ETH","FTM","JOE","MINA","CAKE","PLGR","DOT","QUICK","BOO","TARA","RUNE","VEGA","XRP","SOL","DOGE","TRX","FLOW","EOS","AAVE","HNT","FTM","GRT","NEO","CEL","CRV","NEXO","TWT","CLV","GST","SAND","LRC","PLA","CHR","STG","XYO","ANT","ENJ","MVL","PMON","RFOX"]
         for x in raw_tokens:
+            
+            time.sleep(62)
             self.info_data(x)
     
     def export_data(self,name):
