@@ -1,3 +1,4 @@
 requests
 web3
 eth-tester
+python-coinmarketcap
