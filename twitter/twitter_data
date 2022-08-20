@@ -1,0 +1,15 @@
+from regex import X
+from utils.resource import KEYS_T as keys_twiiter
+from utils.resource import COLUMS as columns
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import tweepy
+import re
+import json
+from cleaning.text_analysis import Text_analysis
+
+class Twitter_data():
+    def __init__():
+        authenticate = tweepy.OAuthHandler(keys["api_key"], keys["api_key_secret"]) 
+        authenticate.set_access_token(keys["access_token"], keys["acces_token_secret"])
