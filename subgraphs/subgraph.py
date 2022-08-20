@@ -1,8 +1,5 @@
 import requests
 
-# pretty print is used to print the output in the console in an easy to read format
-from pprint import pprint
-from private_keys import THEGRAPH_API_KEY
 
 SUBGRAPHS = {
     "premia-mainnet": "https://gateway.thegraph.com/api/{}/subgraphs/id/3nXfK3RbFrj6mhkGdoKRowEEti2WvmUdxmz73tben6Mb",
