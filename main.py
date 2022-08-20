@@ -67,7 +67,7 @@ results_tab, json_results_tab, query_code_tab = st.tabs(
 # Tabs section
 with results_tab:
     if subgraph_response:
-        pass
+        prettify_json(subgraph_response)
         # We need to make the prettify_json func
 
 
