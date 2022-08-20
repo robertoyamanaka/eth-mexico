@@ -18,6 +18,7 @@ SUBGRAPHS = {
     "uniswap-v2": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
     "doodle-bucket-auction": "https://gateway.thegraph.com/api/{}/subgraphs/id/zgYQMZnyfRtH4vyvTZE6TLtkPLfCpDreg6rPHzWrJm2",
     "polkabridge-amm": "https://gateway.thegraph.com/api/{}/subgraphs/id/4CUsiX9vBdi7FUwn28JEqzjuCumMrEzvBtctHQZmGiEt",
+    "gelato":"https://gateway.thegraph.com/api/{}/subgraphs/id/LLMtDiq5u1BkbrEN2fhMtCNmR3euSjaQWWRM2tBsMJG"
 }
 
 
@@ -37,3 +38,13 @@ class SubGraph:
             return request.json()
         else:
             raise Exception(f"Query failed, {request.status_code}")
+
+
+
+
+graph = SubGraph("gelato", "95d628d7b536fa6502638c8e12f2078b")
+
+raw_query = "{ versions(first: 5) { id tasks {id}}tasks(first: 5) {id version {id}taskCreator {id}execAddress}}"
+
+
+print(graph.run_query(raw_query))
