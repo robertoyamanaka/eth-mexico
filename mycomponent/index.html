@@ -1,0 +1,142 @@
+<html>
+  <body>
+    <button
+        class="btn btn-primary btn-lg btn-block mb-3"
+        id="connectButton"
+        disabled>
+        Connect
+    </button>
+    <button
+        class="btn btn-primary btn-lg btn-block mb-3"
+        id="getAccounts">
+        eth_accounts
+    </button>
+    <!-- Set up your HTML here -->
+    <!-- <p class="info-text alert alert-secondary">
+        eth_accounts result: <span id="getAccountsResult"></span>
+    </p> -->
+    <input id="getAccountsResult" value="" />
+
+    <script>
+      // ----------------------------------------------------
+      // Just copy/paste these functions as-is:
+
+        function sendMessageToStreamlitClient(type, data) {
+        var outData = Object.assign({
+            isStreamlitMessage: true,
+            type: type,
+        }, data);
+        window.parent.postMessage(outData, "*");
+        }
+
+        function init() {
+        sendMessageToStreamlitClient("streamlit:componentReady", {apiVersion: 1});
+        }
+
+        function setFrameHeight(height) {
+        sendMessageToStreamlitClient("streamlit:setFrameHeight", {height: height});
+        }
+
+        // The `data` argument can be any JSON-serializable value.
+        function sendDataToPython(data) {
+        sendMessageToStreamlitClient("streamlit:setComponentValue", data);
+        }
+
+      // ----------------------------------------------------
+      // Now modify this part of the code to fit your needs:
+        /*
+        The `piggybankContract` is compiled from:
+
+        pragma solidity ^0.4.0;
+        contract PiggyBank {
+
+            address public owner;
+
+            function PiggyBank() public {
+                owner = msg.sender;
+            }
+        }
+        */
+
+        const initialize = () => {
+        //Basic Actions Section
+        const onboardButton = document.getElementById('connectButton');
+        const getAccountsButton = document.getElementById('getAccounts');
+        const getAccountsResult = document.getElementById('getAccountsResult');
+
+        //Created check function to see if the MetaMask extension is installed
+        const isMetaMaskInstalled = () => {
+            //Have to check the ethereum binding on the window object to see if it's installed
+            const { ethereum } = window;
+            return Boolean(ethereum && ethereum.isMetaMask);
+        };
+
+        const onClickConnect = async () => {
+            try {
+            // Will open the MetaMask UI
+            // You should disable this button while the request is pending!
+            await ethereum.request({ method: 'eth_requestAccounts' });
+            } catch (error) {
+            console.error(error);
+            }
+        };
+
+        const MetaMaskClientCheck = () => {
+            //Now we check to see if Metmask is installed
+            if (!isMetaMaskInstalled()) {
+                console.log("MetaMask is not installed");
+            } else {
+                //If MetaMask is installed we ask the user to connect to their wallet
+                onboardButton.innerText = 'Connect';
+                //When the button is clicked we call this function to connect the users MetaMask Wallet
+                onboardButton.onclick = onClickConnect;
+                //The button is now disabled
+                onboardButton.disabled = false;
+            }
+            
+        };
+
+        //Eth_Accounts-getAccountsButton
+        getAccountsButton.addEventListener('click', async () => {
+            //we use eth_accounts because it returns a list of addresses owned by us.
+            const accounts = await ethereum.request({ method: 'eth_accounts' });
+            //We take the first address in the array of addresses and display it
+            // getAccountsResult.innerHTML = accounts[0] || 'Not able to get accounts';
+            getAccountsResult.value = accounts[0];
+            sendDataToPython({
+                value: getAccountsResult.value,
+                dataType: "json",
+            });
+        });
+
+        MetaMaskClientCheck();
+        };
+
+        window.addEventListener('DOMContentLoaded', initialize);
+
+        var getAccountsResult = document.getElementById("getAccountsResult");
+
+        // data is any JSON-serializable value you sent from Python,
+        // and it's already deserialized for you.
+        function onDataFromPython(event) {
+        if (event.data.type !== "streamlit:render") return;
+        // getAccountsResult.value = event.data.args.account_results;  // Access values sent from Python here!
+        }
+
+        // Hook things up!
+        window.addEventListener("message", onDataFromPython);
+        init();
+
+        // Hack to autoset the iframe height.
+        window.addEventListener("load", function() {
+        window.setTimeout(function() {
+            setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+        });
+
+        // Optionally, if the automatic height computation fails you, give this component a height manually
+        // by commenting out below:
+        //setFrameHeight(200);
+    </script>
+  </body>
+</html>

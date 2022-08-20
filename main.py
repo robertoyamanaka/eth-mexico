@@ -7,6 +7,7 @@ import openai
 from subgraphs.subgraph import SubGraph
 from nlp_models.gpt import GPT
 from nlp_models.gpt_training import add_graphQL_examples
+from mycomponent import mycomponent
 
 from keys.private_keys import OPENAI_PRIVATE_KEY, THEGRAPH_API_KEY
 
@@ -53,8 +54,12 @@ def load_gpt3_model():
 # -----------------------------------------------------------
 # Main Section
 # -----------------------------------------------------------
-
+# GPT
 gpt = load_gpt3_model()
+
+# Metamask
+value = mycomponent(account_results="hello there")
+st.write("Received", value)
 
 subgraph_response = {}
 query = ""
@@ -70,8 +75,8 @@ text_query = st.text_input(
 query_action = st.button("Run Search")
 
 if query_action:  # if pressed
-    raw_query = gpt.submit_request(text_query).choices[0].text.split("output: ")[-1] # gpt
-    # raw_query = "uniswap-v2{pairs(first: 9, where: {reserveETH_gt: '100000'}, orderBy: reserveETH, orderDirection: desc) {reserveUSD}}"
+    # raw_query = gpt.submit_request(text_query).choices[0].text.split("output: ")[-1] # gpt
+    raw_query = "uniswap-v2{pairs(first: 9, where: {reserveETH_gt: '100000'}, orderBy: reserveETH, orderDirection: desc) {reserveUSD}}"
     subgraph_response, actual_query = query_subgraph(raw_query)
 
 results_tab, json_results_tab, query_code_tab = st.tabs(
