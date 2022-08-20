@@ -2,6 +2,34 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 
+
+from subgraphs.subgraph import SubGraph
+from keys.private_keys import THEGRAPH_API_KEY
+
+# -----------------------------------------------------------
+# Aux Functions
+# -----------------------------------------------------------
+
+
+def clean_query(raw_query):
+    subgraph = raw_query.split("{")[0]
+    query = raw_query.split(subgraph)[-1].replace("'", '"')
+    return subgraph, query
+
+
+def query_subgraph(raw_query):
+    # GPT3 part missing! add it here plz
+
+    subgraph, query = clean_query(raw_query)
+    subgraph = SubGraph(subgraph, api_key=THEGRAPH_API_KEY)
+    return subgraph.run_query(query), query
+
+
+# -----------------------------------------------------------
+# Main Function
+# -----------------------------------------------------------
+
+
 subgraph_response = {}
 query = ""
 actual_query = ""
