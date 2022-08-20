@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project wise
+.eth_mexico/**
+keys/**
+pruebas/**
+media/**
