@@ -1,5 +1,5 @@
 # Based on
-# https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment
+# https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest
 
 
 # Tasks:
