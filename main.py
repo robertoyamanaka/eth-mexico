@@ -1,10 +1,14 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
+import openai
 
 # Local imports
 from subgraphs.subgraph import SubGraph
-from keys.private_keys import THEGRAPH_API_KEY
+from nlp_models.gpt import GPT
+from nlp_models.gpt_training import add_graphQL_examples
+
+from keys.private_keys import OPENAI_PRIVATE_KEY, THEGRAPH_API_KEY
 
 # -----------------------------------------------------------
 # Aux Functions
@@ -38,15 +42,25 @@ def prettify_json(ugly_json):
             st.write(ugly_json["data"][data_point])
 
 
+@st.cache
+def load_gpt3_model():
+    openai.api_key = OPENAI_PRIVATE_KEY
+    gpt = GPT(engine="davinci", temperature=0.5, max_tokens=100)
+    add_graphQL_examples(gpt)
+    return gpt
+
+
 # -----------------------------------------------------------
 # Main Section
 # -----------------------------------------------------------
+
+gpt = load_gpt3_model()
 
 subgraph_response = {}
 query = ""
 actual_query = ""
 image = Image.open(
-    "/Users/robertoyamanaka/Documents/EthHack/gpt3_testing/media/google_logo.png"
+    "/Users/robertoyamanaka/Documents/EthHack/eth-mexico/media/google_logo.png"
 )
 st.image(image, use_column_width=True)
 text_query = st.text_input(
@@ -56,8 +70,8 @@ text_query = st.text_input(
 query_action = st.button("Run Search")
 
 if query_action:  # if pressed
-    st.write("pressed")
-    raw_query = "uniswap-v2{pairs(first: 9, where: {reserveETH_gt: '100000'}, orderBy: reserveETH, orderDirection: desc) {reserveUSD}}"
+    raw_query = gpt.submit_request(text_query).choices[0].text.split("output: ")[-1] # gpt
+    # raw_query = "uniswap-v2{pairs(first: 9, where: {reserveETH_gt: '100000'}, orderBy: reserveETH, orderDirection: desc) {reserveUSD}}"
     subgraph_response, actual_query = query_subgraph(raw_query)
 
 results_tab, json_results_tab, query_code_tab = st.tabs(

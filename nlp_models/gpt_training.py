@@ -1,4 +1,4 @@
-from gpt import Example
+from nlp_models.gpt import Example
 
 
 def add_graphQL_examples(gpt):
