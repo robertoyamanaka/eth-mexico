@@ -11,6 +11,7 @@ from metamask_component import metamask_component
 
 from keys.private_keys import OPENAI_PRIVATE_KEY, THEGRAPH_API_KEY
 
+from etherscan.etherscan_data import Etherscan_scan
 # -----------------------------------------------------------
 # Aux Functions
 # -----------------------------------------------------------
@@ -56,6 +57,15 @@ def load_gpt3_model():
     return gpt
 
 
+def json_to_df(raw_json):
+    df = pd.DataFrame(columns=["token","general","google_trends","Semblanza","k-means"])
+    for x in raw_json.keys():
+        pre = {}
+        pre["token"] = x
+        for y in raw_json[x].keys():
+            pre[y] = raw_json[x][y]
+        df = df.append(pre, ignore_index=True)
+    return df
 # -----------------------------------------------------------
 # Main Section
 # -----------------------------------------------------------
@@ -64,15 +74,49 @@ gpt = load_gpt3_model()
 
 # Metamask
 value = metamask_component(account_results="hello there")
-# st.write("Received", value)
 
 subgraph_response = {}
 query = ""
 actual_query = ""
 image = Image.open(
-    "/Users/robertoyamanaka/Documents/EthHack/eth-mexico/media/waphl_logo.png"
+    "/Users/gerardogodfreyc/Documents/Proyectos/ETH_Hackaton/eth-mexico/media/waphl_logo.png"
 )
 st.image(image, use_column_width=True)
+
+
+#Balance 
+with st.expander("Balance and recomenndations"):
+    if value :
+        st.markdown("### Wallet:")
+        st.write(value)
+        c1 = Etherscan_scan(value,testing=True)
+        st.markdown("### Balance:")
+        st.write(c1.get_json_balance())
+
+        st.markdown("### Recomendation:")
+        raw_json = {
+            "sim_ETH":{
+                "general": 90,
+                "google_trends": 80,
+                "Semblanza": 90,
+                "k-means": 100,
+            },
+            "sim_UNI":{
+                "general": 100,
+                "google_trends": 100,
+                "Semblanza": 100,
+                "k-means": 100,
+            },
+        }
+        df_data = json_to_df(raw_json)
+        st.table(data= df_data) 
+
+    else:
+        st.write("Sin datos actualizados")
+
+
+
+st.markdown("## Search:")
 text_query = st.text_input(
     label="",
     placeholder="give me the id, exact, decimals and simple for the first 7 metrics in the mStable protocol subgraph",
@@ -93,6 +137,7 @@ with results_tab:
     if subgraph_response:
         prettify_json(subgraph_response)
         # We need to make the prettify_json func
+
 
 
 with json_results_tab:
