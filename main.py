@@ -140,7 +140,7 @@ with st.expander("Balance and recomenndations"):
             'APE': {'similar_symbol': 'DAI', 'percentage': 0.5156382918357849}
         }
         df_data = json_to_df(raw_json)
-        st.markdown("#### Identidad:")
+        st.markdown("#### Description similarity:")
         table, plot,recommendation = st.tabs(["table", "plot","recommendation"])
         with table:
             st.table(data= df_data)
@@ -162,9 +162,9 @@ with st.expander("Balance and recomenndations"):
                 st.write("https://thegraph.com/docs/en/cookbook/quick-start/")
 
          
-        st.markdown("#### Segundo:")
+        st.markdown("#### Social Trends :")
         st.table(data= df_data) 
-        st.markdown("#### Tercero:")
+        st.markdown("#### Similar Protocol:")
         st.table(data= df_data) 
 
     else:
