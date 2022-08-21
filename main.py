@@ -7,7 +7,7 @@ import openai
 from subgraphs.subgraph import SubGraph
 from nlp_models.gpt import GPT
 from nlp_models.gpt_training import add_graphQL_examples
-from mycomponent import mycomponent
+from metamask_component import metamask_component
 
 from keys.private_keys import OPENAI_PRIVATE_KEY, THEGRAPH_API_KEY
 
@@ -43,6 +43,11 @@ def prettify_json(ugly_json):
             st.write(ugly_json["data"][data_point])
 
 
+# CSS
+with open("styles/style.css", "r") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
 @st.cache
 def load_gpt3_model():
     openai.api_key = OPENAI_PRIVATE_KEY
@@ -58,14 +63,14 @@ def load_gpt3_model():
 gpt = load_gpt3_model()
 
 # Metamask
-value = mycomponent(account_results="hello there")
-st.write("Received", value)
+value = metamask_component(account_results="hello there")
+# st.write("Received", value)
 
 subgraph_response = {}
 query = ""
 actual_query = ""
 image = Image.open(
-    "/Users/robertoyamanaka/Documents/EthHack/eth-mexico/media/google_logo.png"
+    "/Users/robertoyamanaka/Documents/EthHack/eth-mexico/media/waphl_logo.png"
 )
 st.image(image, use_column_width=True)
 text_query = st.text_input(
