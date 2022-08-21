@@ -155,17 +155,77 @@ with st.expander("Balance and recomenndations"):
             c = row_1['similarity']
             dont = ["HEX","BNB","USDT","SHIBA","APE","WBTC","Matic","DAI"]
             st.write(f"For this model, we find that the cryptocurrency {a} you have is a {c} similar to {b}.") 
-            if b not in dont:
-                st.write(f"{b} It does have a subgraph in The graph !!! Look for browsing in it on this page ")
-            else:
+            if b in dont:
                 st.write(f"{b} It does not have a subgraph in The graph !!! Look for browsing in it on this page:")
                 st.write("https://thegraph.com/docs/en/cookbook/quick-start/")
+                
+            else:
+                st.write(f"{b} It does have a subgraph in The graph !!! Look for browsing in it on this page ")
+                
 
-         
-        st.markdown("#### Social Trends :")
-        st.table(data= df_data) 
+        raw_json2 = {
+            'GEL': {'similar_symbol': 'LDO', 'percentage': 0.21330898721810916},
+            'SUSHI': {'similar_symbol': 'CRV', 'percentage': 0.44848007202148},
+            'SNX': {'similar_symbol': 'COMP', 'percentage': 0.00770082211494446},
+            'DAI': {'similar_symbol': 'USDC', 'percentage': 0.3575156382918849},
+            'APE': {'similar_symbol': 'POOL', 'percentage': 0.6156382918357849}
+        }
+        df_data2 = json_to_df(raw_json2)
         st.markdown("#### Similar Protocol:")
-        st.table(data= df_data) 
+        table, plot,recommendation = st.tabs(["table", "plot","recommendation"])
+        with table:
+            st.table(data= df_data2)
+        with plot:
+            fig = px.bar(df_data2, x='token_owner', y='similarity', color='similar_token')
+            st.plotly_chart(fig)
+        with recommendation:
+            df_data2 = df_data2.sort_values(by='similarity', ascending=False)
+            row_1=df_data2.iloc[0]
+            a = row_1['token_owner']
+            b = row_1['similar_token']
+            c = row_1['similarity']
+            dont = ["HEX","BNB","USDT","SHIBA","APE","WBTC","Matic","DAI"]
+            st.write(f"For this model, we find that the cryptocurrency {a} you have is a {c} similar to {b}.") 
+            if b in dont:
+                st.write(f"{b} It does not have a subgraph in The graph !!! Look for browsing in it on this page:")
+                st.write("https://thegraph.com/docs/en/cookbook/quick-start/")
+                
+            else:
+                st.write(f"{b} It does have a subgraph in The graph !!! Look for browsing in it on this page ")
+                
+
+
+        raw_json3 = {
+            'GEL': {'similar_symbol': 'BAL', 'percentage': 0.67239891308121810},
+            'SUSHI': {'similar_symbol': 'COMP', 'percentage': 0.4720214805800808},
+            'SNX': {'similar_symbol': 'MANA', 'percentage': 0.37149400824121446},
+            'DAI': {'similar_symbol': 'SNX', 'percentage': 0.2951818357563849},
+            'APE': {'similar_symbol': 'BNB', 'percentage': 0.5235781569183849}
+        }
+        df_data3 = json_to_df(raw_json3)
+        st.markdown("#### Social Trends :")
+        table, plot,recommendation = st.tabs(["table", "plot","recommendation"])
+        with table:
+            st.table(data= df_data3)
+        with plot:
+            fig = px.bar(df_data3, x='token_owner', y='similarity', color='similar_token')
+            st.plotly_chart(fig)
+        with recommendation:
+            df_data3 = df_data3.sort_values(by='similarity', ascending=False)
+            row_1=df_data3.iloc[0]
+            a = row_1['token_owner']
+            b = row_1['similar_token']
+            c = row_1['similarity']
+            dont = ["HEX","BNB","USDT","SHIBA","APE","WBTC","Matic","DAI"]
+            st.write(f"For this model, we find that the cryptocurrency {a} you have is a {c} similar to {b}.") 
+            if b in dont:
+                st.write(f"{b} It does not have a subgraph in The graph !!! Look for browsing in it on this page:")
+                st.write("https://thegraph.com/docs/en/cookbook/quick-start/")
+                
+            else:
+                st.write(f"{b} It does have a subgraph in The graph !!! Look for browsing in it on this page ")
+                
+
 
     else:
         st.write("Sin datos actualizados")
