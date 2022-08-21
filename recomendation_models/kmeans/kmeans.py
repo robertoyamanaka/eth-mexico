@@ -5,7 +5,7 @@ import numpy as np
 import sys
 
 sys.path.append("../")
-from lunar_crush.lunar_crush import LunarCrushData
+from kmeans.lunar_crush import LunarCrushData
 
 
 # -----------------------------------------------------------
@@ -43,11 +43,19 @@ def get_coords():
     )
 
 
-def get_min_distance_symbol(symbol):
-    df_coords = pd.read_csv(
-        "/Users/robertoyamanaka/Documents/EthHack/eth-mexico/kmeans/kmeans_results_2.csv"
-    )
-    point = list(df_coords[df_coords["symbol"]==df_coords].loc[0])[-3:]
-    distancias = get_euclidian_distance_to_point(point, df_coords)
+def get_min_distance_symbol(symbol, df_coords, symbol_json_20):
+    try:
+        point = df_coords[df_coords["symbol"] == symbol][
+            ["x_coord", "y_coord", "z_coord"]
+        ].values[0]
+    except:
+        raise Exception("Symbol not found")
+        point = [0, 0, 0]
+    df_coords_reduced = df_coords[df_coords["symbol"].isin(list(symbol_json_20.keys()))]
+    distancias = get_euclidian_distance_to_point(point, df_coords_reduced)
+    distancias = list(filter(lambda score: score > 0.01, distancias))
     min_distance_pos = np.argmin(distancias)
-    return df_coords.iloc[min_distance_pos]["symbol"]
+    return (
+        df_coords_reduced.iloc[min_distance_pos]["symbol"],
+        distancias[min_distance_pos],
+    )
