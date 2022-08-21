@@ -3,9 +3,9 @@ import sys
 import pandas as pd
 import numpy as np
 
-from coin_list import COIN_LIST
+from kmeans.coin_list import COIN_LIST
 
-sys.path.append("../")
+sys.path.append("../../")
 from keys.private_keys import LUNAR_CRUSH_BEARER_TOKEN
 
 

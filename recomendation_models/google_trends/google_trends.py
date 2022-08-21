@@ -2,9 +2,6 @@
 import pandas as pd
 from pytrends.request import TrendReq
 
-# from keys import RELEVANCE
-from datetime import datetime
-
 
 class GoogleTrend:
     def __init__(self, keyword, year_start=2021, month_start=9):
@@ -30,7 +27,6 @@ class GoogleTrend:
         )
         self.clean_data()
         self.summarize_data()  # Monthly
-        self.get_rolling_window()
 
     def clean_data(self):
         self.historicaldf.drop(["isPartial"], axis=1, inplace=True)

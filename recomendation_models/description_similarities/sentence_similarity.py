@@ -1,12 +1,8 @@
-import json
 import requests
 import sys
 
-sys.path.append("../")
+sys.path.append("../../")
 from keys.private_keys import HUGGING_API_KEY
-
-import json
-import requests
 
 
 class SentenceSimilarity:
