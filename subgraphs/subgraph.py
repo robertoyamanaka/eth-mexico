@@ -18,8 +18,25 @@ SUBGRAPHS = {
     "uniswap-v2": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
     "doodle-bucket-auction": "https://gateway.thegraph.com/api/{}/subgraphs/id/zgYQMZnyfRtH4vyvTZE6TLtkPLfCpDreg6rPHzWrJm2",
     "polkabridge-amm": "https://gateway.thegraph.com/api/{}/subgraphs/id/4CUsiX9vBdi7FUwn28JEqzjuCumMrEzvBtctHQZmGiEt",
+    "abi_gelato": "https://gateway.thegraph.com/api/{}/subgraphs/id/LLMtDiq5u1BkbrEN2fhMtCNmR3euSjaQWWRM2tBsMJG",
+    "Curve": "https://gateway.thegraph.com/api/{}/subgraphs/id/4yx4rR6Kf8WH4RJPGhLSHojUxJzRWgEZb51iTran1sEG",
+    "Balancer": "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer",
+    "Compound":"https://api.thegraph.com/subgraphs/name/graphprotocol/compound-v2",
+    "Decentraland":"https://api.thegraph.com/subgraphs/name/decentraland/marketplace", 
+    "Usdc": "https://api.thegraph.com/subgraphs/name/centrehq/usdc", 
+    "Synthetix": "https://api.thegraph.com/subgraphs/name/synthetixio-team/synthetix",
+    "SHIBA INU": None,
+    "ApeCoin": None,
+    "ChainLink Token": None,
+    "Wrapped BTC": None,
+    "Matic Token": None,
+    "Dai Stablecoin": None,
+    "HEX": None,
+    "BNB": None,
+    "Tether USD": None,
 }
 
+dont = ["HEX","BNB","USDT","SHIBA","APE","WBTC","Matic","DAI"]
 
 class SubGraph:
     def __init__(self, subgraph_name, api_key):
