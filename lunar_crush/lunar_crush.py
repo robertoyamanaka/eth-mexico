@@ -1,15 +1,12 @@
 import requests
 import sys
 import pandas as pd
+import numpy as np
 
 from coin_list import COIN_LIST
 
 sys.path.append("../")
 from keys.private_keys import LUNAR_CRUSH_BEARER_TOKEN
-
-# -----------------------------------------------------------
-# Aux Functions
-# -----------------------------------------------------------
 
 
 class LunarCrushData:
@@ -25,7 +22,6 @@ class LunarCrushData:
         return json_response
 
     def get_all_data(self):
-        df = pd.DataFrame()
         responses = []
         for symbol in self.coin_list:
             json_response = self.get_json_data(symbol)
@@ -36,3 +32,17 @@ class LunarCrushData:
             responses.append(combined_response)
 
         self.all_data = pd.DataFrame.from_records(responses)
+        self.all_data = self.all_data.drop(
+            [
+                "news",
+                "medium",
+                "youtube",
+                "reddit_posts",
+                "reddit_posts_score",
+                "reddit_comments",
+                "reddit_comments_score",
+            ],
+            axis=1,
+        )
+        self.all_data.replace("", np.nan, inplace=True)
+        self.all_data.dropna(axis=1, inplace=True)
