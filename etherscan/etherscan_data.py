@@ -134,19 +134,25 @@ class Etherscan_scan():
 
     CMC_DATA = Cmc_data()
 
-    def __init__(self,walletAddress):
+    def __init__(self,walletAddress,testing=False):
         self.w3 = Web3(Web3.HTTPProvider(Etherscan_scan.URL_INFURA))
-        self.walletAddress = walletAddress
+        if testing: 
+            print("HACIENDO WALLET TEST")
+            self.walletAddress = "0xbdfa4f4492dd7b7cf211209c4791af8d52bf5c50"
+        else:
+            self.walletAddress = walletAddress
+        self.data_balance = {}
         self.tour_abis()
-
+        
     def tour_abis(self):
         for key in Etherscan_scan.DATA_ABI.keys():
             self.deploy_contract(Etherscan_scan.DATA_ABI[key]["tokenAddress"],
                 Etherscan_scan.DATA_ABI[key]["abi"])
             print(f"Balance de {self.symbol()} es : {self.general_balance()}")
-            Etherscan_scan.CMC_DATA.info_data(self.symbol())
+            self.data_balance[self.symbol()] = self.general_balance()
+            #Etherscan_scan.CMC_DATA.info_data(self.symbol())
             
-        Etherscan_scan.CMC_DATA.export_data("cmc_data.json")
+        #Etherscan_scan.CMC_DATA.export_data("cmc_data.json")
 
     def deploy_contract(self,tokenAddress,abi):
         self.contract = self.w3.eth.contract(address=tokenAddress, abi=abi)
@@ -167,6 +173,13 @@ class Etherscan_scan():
         total_supply = float (self.w3.fromWei(self.contract.functions.totalSupply().call(), 'ether'))
         return total_supply
 
+    def get_json_balance(self):
+        balance = {}
+        for x in self.data_balance.keys():
+            if self.data_balance[x] != 0:
+                balance[x] = self.data_balance[x]
 
-c1 = Etherscan_scan("0xbdfa4f4492dd7b7cf211209c4791af8d52bf5c50")
+        return balance
+
+#c1 = Etherscan_scan("0xbdfa4f4492dd7b7cf211209c4791af8d52bf5c50")
         
